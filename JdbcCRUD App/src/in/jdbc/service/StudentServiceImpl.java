@@ -1,17 +1,18 @@
 package in.jdbc.service;
 
+import in.jdbc.daofactory.StudentDaoFactory;
 import in.jdbc.dto.Student;
-import in.jdbc.servicefactory.StudentServiceFactory;
+import in.jdbc.persistence.IStudentDao;
 
 //service layer logic
 public class StudentServiceImpl implements IStudentService {
 
-	IStudentService studentService;
-	
+	private IStudentDao stdDao;
+
 	@Override
 	public String addStudent(String sname, Integer sage, String saddress) {
-		studentService = StudentServiceFactory.getStudentService();
-		return studentService.addStudent(sname, sage, saddress);
+		stdDao = StudentDaoFactory.getStudentDao();
+		return stdDao.addStudent(sname, sage, saddress);
 	}
 
 	@Override
