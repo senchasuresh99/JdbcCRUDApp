@@ -39,7 +39,7 @@ public class JdbcUtil {
 			conn.close();
 		}
 		if (pstmt != null) {
-			// stst.close();
+			pstmt.close();
 		}
 		if (rs != null) {
 			rs.close();
