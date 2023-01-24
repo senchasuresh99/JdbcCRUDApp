@@ -12,9 +12,31 @@ public class TestApp {
 	public static void main(String[] args) {
 		// insertOperatation();
 		// selectOperatation();
-		deleteOperatation();
+		//deleteOperatation();
+		updateOperatation();
 	}
 
+	private static void updateOperatation() {
+		IStudentService studentService = StudentServiceFactory.getStudentService();
+		Scanner scanner = new Scanner(System.in);
+		System.out.print("Enter the student id : ");
+		int sid = scanner.nextInt();
+		System.out.print("Enter the student name : ");
+		String sname = scanner.next();
+		System.out.print("Enter the student age : ");
+		int sage = scanner.nextInt();
+		System.out.print("Enter the student saddress : ");
+		String saddress = scanner.next();
+		String addStudent = studentService.updateStudent(sid, sname, sage, saddress);
+		if (addStudent.equalsIgnoreCase("success")) {
+			System.out.println("record Updated succesfully");
+		} else {
+			System.out.println("record updation failed.....");
+		}
+		scanner.close();
+	}
+	
+	@SuppressWarnings("unused")
 	private static void deleteOperatation() {
 		Scanner scanner = new Scanner(System.in);
 		System.out.print("Enter the student id to be deleted : ");
