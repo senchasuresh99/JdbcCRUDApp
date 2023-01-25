@@ -10,10 +10,23 @@ import in.jdbc.servicefactory.StudentServiceFactory;
 public class TestApp {
 
 	public static void main(String[] args) {
-		// insertOperatation();
-		// selectOperatation();
-		//deleteOperatation();
-		updateOperatation();
+		System.out.println("Enter 1 to insert the values");
+		System.out.println("Enter 2 to select the values");
+		System.out.println("Enter 3 to Delete the values");
+		System.out.println("Enter 4 to Update the values");
+		Scanner scanner = new Scanner(System.in);
+		System.out.print("Enter the Number : ");
+		int in = scanner.nextInt();
+		if(in == 1) {
+			insertOperatation();
+		} else if(in == 2) {
+			selectOperatation();
+		}else if(in == 3) {
+			deleteOperatation();
+		}else if(in == 4) {
+			updateOperatation();
+		}
+		scanner.close();
 	}
 
 	private static void updateOperatation() {
@@ -36,7 +49,6 @@ public class TestApp {
 		scanner.close();
 	}
 	
-	@SuppressWarnings("unused")
 	private static void deleteOperatation() {
 		Scanner scanner = new Scanner(System.in);
 		System.out.print("Enter the student id to be deleted : ");
@@ -55,7 +67,6 @@ public class TestApp {
 
 	}
 
-	@SuppressWarnings("unused")
 	private static void selectOperatation() {
 		Scanner scanner = new Scanner(System.in);
 		System.out.print("Enter the student id : ");
@@ -74,7 +85,6 @@ public class TestApp {
 		scanner.close();
 	}
 
-	@SuppressWarnings("unused")
 	private static void insertOperatation() {
 		IStudentService studentService = StudentServiceFactory.getStudentService();
 		Scanner scanner = new Scanner(System.in);
