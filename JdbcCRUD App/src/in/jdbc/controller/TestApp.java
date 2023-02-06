@@ -1,5 +1,8 @@
 package in.jdbc.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 import in.jdbc.dto.Student;
@@ -9,46 +12,83 @@ import in.jdbc.servicefactory.StudentServiceFactory;
 // controller logic
 public class TestApp {
 
-	public static void main(String[] args) {
-		System.out.println("Enter 1 to insert the values");
-		System.out.println("Enter 2 to select the values");
-		System.out.println("Enter 3 to Delete the values");
-		System.out.println("Enter 4 to Update the values");
-		Scanner scanner = new Scanner(System.in);
-		System.out.print("Enter the Number : ");
-		int in = scanner.nextInt();
-		if(in == 1) {
-			insertOperatation();
-		} else if(in == 2) {
-			selectOperatation();
-		}else if(in == 3) {
-			deleteOperatation();
-		}else if(in == 4) {
-			updateOperatation();
+	public static void main(String[] args) throws IOException {
+		while (true) {
+			BufferedReader scanner = new BufferedReader(new InputStreamReader(System.in));
+			System.out.println("ENTER 1 TO INSERT THE VALUES");
+			System.out.println("ENTER 2 TO SELECT THE VALUES");
+			System.out.println("ENTER 3 TO DELETE THE VALUES");
+			System.out.println("ENTER 4 TO UPDATE THE VALUES");
+			System.out.println("ENTER 5 TO EXITE");
+			System.out.print("ENTER THE NUMBER : ");
+			String options = scanner.readLine();
+
+			switch (options) {
+			case "1":
+				insertOperatation();
+				break;
+			case "2":
+				selectOperatation();
+				break;
+			case "3":
+				deleteOperatation();
+				break;
+			case "4":
+				updateOperatation();
+				break;
+			case "5":
+				System.out.println("********** THANKS FOR USING THE APPLICATIN **********");
+				System.exit(0);
+			default:
+				System.err.println("INVALID OPTION PLEASE TRY AGAIN WITH VALID OPTION...");
+				break;
+			}
 		}
-		scanner.close();
 	}
 
-	private static void updateOperatation() {
+	private static void updateOperatation() throws IOException {
 		IStudentService studentService = StudentServiceFactory.getStudentService();
-		Scanner scanner = new Scanner(System.in);
-		System.out.print("Enter the student id : ");
-		int sid = scanner.nextInt();
-		System.out.print("Enter the student name : ");
-		String sname = scanner.next();
-		System.out.print("Enter the student age : ");
-		int sage = scanner.nextInt();
-		System.out.print("Enter the student saddress : ");
-		String saddress = scanner.next();
-		String addStudent = studentService.updateStudent(sid, sname, sage, saddress);
-		if (addStudent.equalsIgnoreCase("success")) {
-			System.out.println("record Updated succesfully");
+		BufferedReader scanner = new BufferedReader(new InputStreamReader(System.in));
+		System.out.print("ENTER THE STUDENT ID TO BE UPDATE: ");
+		String sid = scanner.readLine();
+		Student searchStudent = studentService.searchStudent(Integer.parseInt(sid));
+		if (searchStudent != null) {
+			Student newStudent = new Student();
+			System.out.println("Student id is : " + searchStudent.getSid());
+			newStudent.setSid(searchStudent.getSid());
+
+			System.out.print("Student old name is : " + searchStudent.getSname() + " Enter New Name : ");
+			String newName = scanner.readLine();
+			if (newName.equalsIgnoreCase("") || newName == "") {
+				newStudent.setSname(searchStudent.getSname());
+			} else {
+				newStudent.setSname(newName);
+			}
+			System.out.print("Student old age is : " + searchStudent.getSage() + " Enter New Age : ");
+			String newAge = scanner.readLine();
+			if (newAge.equalsIgnoreCase("") || newAge == "") {
+				newStudent.setSage(searchStudent.getSage());
+			} else {
+				newStudent.setSage(Integer.parseInt(newAge));
+			}
+			System.out.print("Student old address is : " + searchStudent.getSaddress() + " Enter New address : ");
+			String newAddress = scanner.readLine();
+			if (newAddress.equalsIgnoreCase("") || newAddress == "") {
+				newStudent.setSaddress(searchStudent.getSaddress());
+			} else {
+				newStudent.setSaddress(newAddress);
+			}
+			String updateStudent = studentService.updateStudent(newStudent);
+			if (updateStudent.equalsIgnoreCase("success")) {
+				System.out.println("record updated succesfully");
+			} else {
+				System.err.println("record updation failed.....");
+			}
 		} else {
-			System.out.println("record updation failed.....");
+			System.err.println("Student record not available for given id : " + sid);
 		}
-		scanner.close();
 	}
-	
+
 	private static void deleteOperatation() {
 		Scanner scanner = new Scanner(System.in);
 		System.out.print("Enter the student id to be deleted : ");
@@ -59,12 +99,10 @@ public class TestApp {
 		if (status.equalsIgnoreCase("success")) {
 			System.out.println("record deleted succesfully");
 		} else if (status.equalsIgnoreCase("not found")) {
-			System.out.println("record not avilable for the given id : " + sid);
+			System.err.println("record not avilable for the given id : " + sid);
 		} else {
-			System.out.println("record deletion failed.....");
+			System.err.println("record deletion failed.....");
 		}
-		scanner.close();
-
 	}
 
 	private static void selectOperatation() {
@@ -75,14 +113,13 @@ public class TestApp {
 		IStudentService studentService = StudentServiceFactory.getStudentService();
 		Student student = studentService.searchStudent(sid);
 		if (student != null) {
-			System.out.println(student);
+			// System.out.println(student);
 			System.out.println("SID\tSNAME\tSAGE\tSADDRESS");
 			System.out.println(student.getSid() + "\t" + student.getSname() + "\t" + student.getSage() + "\t"
 					+ student.getSaddress());
 		} else {
-			System.out.println("Record not found the given id : " + sid);
+			System.err.println("Record not found the given id : " + sid);
 		}
-		scanner.close();
 	}
 
 	private static void insertOperatation() {
@@ -98,8 +135,7 @@ public class TestApp {
 		if (addStudent.equalsIgnoreCase("success")) {
 			System.out.println("record inserted succesfully");
 		} else {
-			System.out.println("record insertion failed.....");
+			System.err.println("record insertion failed.....");
 		}
-		scanner.close();
 	}
 }
